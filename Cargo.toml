@@ -1,0 +1,17 @@
+[package]
+name = "test-egui-macroquad"
+version = "0.1.0"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[package.metadata.android]
+res = "android_res"
+icon = "@mipmap/skm_launcher"
+
+[package.metadata.android.activity_attributes]
+"android:exported" =  "true"
+"android:screenOrientation" = "userLandscape"
+
+[dependencies]
+egui-macroquad = "0.17.3"
+macroquad = "0.4.14"
