@@ -78,5 +78,5 @@ jobs:
        - name: Upload APK
          uses: actions/upload-artifact@v4
          with:
-          name: flappy-rabbit-apk
+          name: test-egui-macroquad-apk
           path: target/android-artifacts/release/apk/*.apk
