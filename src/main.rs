@@ -68,10 +68,12 @@ async fn main() {
     let mut inf_value: f32 = 3.0;
     let mut avg: f64 = 0.0;
     let mut allowance: f64 = 0.0;
+    let mut initialization = true;
     loop {
         clear_background(WHITE);
 
         egui_macroquad::ui(|egui_ctx| {
+            // enter key will act a TAB e.g. cycle through widgets
             egui_macroquad::egui::CentralPanel::default().show(egui_ctx, |ui| {
                 let window_width = ui.available_width();
                 let window_height = ui.available_height();
@@ -91,10 +93,14 @@ async fn main() {
                                     .size(font_size),
                                 ),
                             );
-                            ui.add_sized(
+                            let pol_slider = ui.add_sized(
                                 [widget_width, widget_height],
                                 egui_macroquad::egui::Slider::new(&mut pol_value, 1.0..=6.0),
                             );
+                            if initialization {
+                                pol_slider.request_focus();
+                                initialization = false;
+                            }
                         });
                         // matematyka
                         ui.horizontal(|ui| {
@@ -179,6 +185,8 @@ async fn main() {
                     });
 
                     // Process keys, mouse etc.
+                    //ui.memory_mut(|mem| mem.request_focus(egui_macroquad::egui::Id::new(_)));
+
                     let points = PlotPoints::from_iter(vec![
                         [1.0, calculate_allowance(1.0, 1.0, 1.0, 1.0)],
                         [2.0, calculate_allowance(2.0, 2.0, 2.0, 2.0)],
