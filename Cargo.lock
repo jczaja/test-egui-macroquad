@@ -801,6 +801,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "pocket_money_calculator"
+version = "0.1.0"
+dependencies = [
+ "egui-macroquad",
+ "egui_plot",
+ "macroquad",
+]
+
+[[package]]
 name = "polling"
 version = "3.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1011,15 +1020,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
-]
-
-[[package]]
-name = "test-egui-macroquad"
-version = "0.1.0"
-dependencies = [
- "egui-macroquad",
- "egui_plot",
- "macroquad",
 ]
 
 [[package]]

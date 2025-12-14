@@ -6,39 +6,6 @@
 use egui_plot::{Bar, BarChart, Line, Plot, PlotPoints};
 use macroquad::prelude::*; // Import necessary components
 
-/*
-
-To normalne zachowanie egui – domyślnie widgety takie jak slider czy label mają stały rozmiar i nie skalują się automatycznie przy zmianie rozmiaru okna. Plot jest wyjątkiem, bo domyślnie wypełnia dostępne miejsce.
-
-**Jak sprawić, by slidery i labelki skalowały się razem z oknem?**
-
-Musisz ręcznie ustawić ich szerokość na podstawie dostępnej szerokości okna. Możesz to zrobić tak:
-
-```rust
-let available_width = ui.available_width();
-
-ui.add_sized([available_width, 24.0], egui_macroquad::egui::Slider::new(&mut pol_value, 1.0..=6.0));
-```
-
-Podobnie dla labeli, możesz użyć `ui.allocate_ui_with_layout` lub `ui.with_layout`, by rozciągnąć je na całą szerokość.
-
-**Przykład dla kilku widgetów:**
-```rust
-let available_width = ui.available_width();
-
-ui.horizontal(|ui| {
-    ui.label("jezyk polski:");
-    ui.add_sized([available_width - 100.0, 24.0], egui_macroquad::egui::Slider::new(&mut pol_value, 1.0..=6.0));
-});
-```
-Odejmij od szerokości tyle, ile zajmuje labelka, żeby slider nie wychodził poza okno.
-
-**Podsumowanie:**
-W egui musisz samodzielnie ustawiać rozmiary widgetów, jeśli chcesz, by skalowały się razem z oknem. Używaj `ui.add_sized` i `ui.available_width()`.
-
-
-*/
-
 // all ui got the same width
 
 //thrs=4.0;
@@ -77,9 +44,21 @@ async fn main() {
             egui_macroquad::egui::CentralPanel::default().show(egui_ctx, |ui| {
                 let window_width = ui.available_width();
                 let window_height = ui.available_height();
-                let widget_width = window_width / 3.0;
-                let widget_height = window_height / 6.0;
-                let font_size = widget_height / 5.0;
+                let widget_width = window_width / 5.0;
+                let widget_height = window_height / 10.0;
+                let font_size = widget_height / 4.0;
+
+                ui.style_mut().spacing.slider_width = widget_width;
+                ui.style_mut().spacing.interact_size.y = widget_height;
+
+                ui.style_mut().text_styles.insert(
+                    egui_macroquad::egui::TextStyle::Body,
+                    egui_macroquad::egui::FontId::new(
+                        font_size,
+                        egui_macroquad::egui::FontFamily::Proportional,
+                    ),
+                );
+
                 ui.horizontal(|ui| {
                     ui.vertical(|ui| {
                         // język polski
@@ -94,9 +73,15 @@ async fn main() {
                                 ),
                             );
                             let pol_slider = ui.add_sized(
-                                [widget_width, widget_height],
-                                egui_macroquad::egui::Slider::new(&mut pol_value, 1.0..=6.0),
+                                [widget_width, widget_height * 0.5],
+                                egui_macroquad::egui::Slider::new(&mut pol_value, 1.0..=6.0)
+                                    .step_by(0.01)
+                                    .show_value(false),
                             );
+                            ui.add(egui_macroquad::egui::Label::new(
+                                egui_macroquad::egui::RichText::new(format!("{:.2}", pol_value))
+                                    .size(font_size),
+                            ));
                             if initialization {
                                 pol_slider.request_focus();
                                 initialization = false;
@@ -115,8 +100,14 @@ async fn main() {
                             );
                             ui.add_sized(
                                 [widget_width, widget_height],
-                                egui_macroquad::egui::Slider::new(&mut mat_value, 1.0..=6.0),
+                                egui_macroquad::egui::Slider::new(&mut mat_value, 1.0..=6.0)
+                                    .step_by(0.01)
+                                    .show_value(false),
                             );
+                            ui.add(egui_macroquad::egui::Label::new(
+                                egui_macroquad::egui::RichText::new(format!("{:.2}", mat_value))
+                                    .size(font_size),
+                            ));
                         });
                         // język angielski
                         ui.horizontal(|ui| {
@@ -131,8 +122,14 @@ async fn main() {
                             );
                             ui.add_sized(
                                 [widget_width, widget_height],
-                                egui_macroquad::egui::Slider::new(&mut ang_value, 1.0..=6.0),
+                                egui_macroquad::egui::Slider::new(&mut ang_value, 1.0..=6.0)
+                                    .step_by(0.01)
+                                    .show_value(false),
                             );
+                            ui.add(egui_macroquad::egui::Label::new(
+                                egui_macroquad::egui::RichText::new(format!("{:.2}", ang_value))
+                                    .size(font_size),
+                            ));
                         });
                         // informatyka
                         ui.horizontal(|ui| {
@@ -147,8 +144,14 @@ async fn main() {
                             );
                             ui.add_sized(
                                 [widget_width, widget_height],
-                                egui_macroquad::egui::Slider::new(&mut inf_value, 1.0..=6.0),
+                                egui_macroquad::egui::Slider::new(&mut inf_value, 1.0..=6.0)
+                                    .step_by(0.01)
+                                    .show_value(false),
                             );
+                            ui.add(egui_macroquad::egui::Label::new(
+                                egui_macroquad::egui::RichText::new(format!("{:.2}", inf_value))
+                                    .size(font_size),
+                            ));
                         });
                         ui.horizontal(|ui| {
                             avg = calculate_average(pol_value, ang_value, mat_value, inf_value);
